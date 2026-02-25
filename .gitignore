@@ -1,0 +1,16 @@
+_pycache_
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg
+*.zip
+*.egg-info/
+dist/
+
+# misc
+.DS_Store
+.env
+.venv
+

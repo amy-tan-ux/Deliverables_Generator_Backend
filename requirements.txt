@@ -1,0 +1,6 @@
+openai
+azure-identity 
+azure-keyvault-secrets
+Flask
+flask-cors
+gunicorn
