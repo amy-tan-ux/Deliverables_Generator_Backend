@@ -58,5 +58,35 @@ def generate():
     )
     return jsonify({"problem_requirements": problem_requirements}), 200
 
+# Generate 4 step pipeline full proposal in one step for efficiency and better context retention
+@app.route("/generate-full-proposal", methods=["POST", "OPTIONS"])
+def generate_full():
+    if request.method == "OPTIONS":
+        req_headers = request.headers.get("Access-Control-Request-Headers", "*")
+        return ("", 204, {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "POST, OPTIONS",
+            "Access-Control-Allow-Headers": req_headers,
+            "Access-Control-Max-Age": "600",
+        })
+
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Invalid JSON payload"}), 400
+
+    session = data.get("session", "")
+    if session != Config.get_secret("SESSION_SECRET_KEY"):
+        return jsonify({"error": "Unauthorized"}), 401
+    
+    business_problem = data.get("business_problem", "")
+    tech_stack = data.get("tech_stack", "")
+    time_constraint = data.get("time_constraint", "")
+    resource_constraints = data.get("resource_constraints", "")
+
+    problem_requirements = deliverable.generate_full_problem_requirements(
+        business_problem, tech_stack, time_constraint, resource_constraints
+    )
+    return jsonify({"problem_requirements": problem_requirements}), 200
+
 if __name__ == "__main__":
     app.run(debug=False, host="0.0.0.0", port=port)

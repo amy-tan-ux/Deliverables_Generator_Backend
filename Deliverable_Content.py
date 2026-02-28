@@ -1,5 +1,12 @@
 import json
 # Takes in Prompts and generates content for the Deliverable
+formatting_instructions = """
+            "tables": {
+                        "TableName": {
+                            "columns": {
+                                "Column Name": "Column Type"
+                            }
+                    """
 class Deliverable_Content:
     def __init__(self, client):
         self.client = client
@@ -27,3 +34,9 @@ class Deliverable_Content:
         prompt = f"Based on the following technical plan, generate a detailed data plan as a json with the fields: data-requirements, data-schema, data-sources, and data-governance. Technical plan: {technical_plan}"
         print("Prompt for data plan generation:\n", prompt)
         return json.loads(self.client.get_response(prompt))
+    
+    def generate_full_problem_requirements(self, business_problem, tech_stack, time_constraint, resource_constraints):
+        prompt = "generate a clear and concise business plan as a json where the fields are executive-summary, problem-definition, problem-requirements, technical-solution, data architecture in the format:" + formatting_instructions + f"(with table names and column schemas) and delivery plan based on the business problem: {business_problem}, tech stack: {tech_stack}, time constraint: {time_constraint}, resource constraints: {resource_constraints}" 
+        print("Prompt for problem requirements generation:\n", prompt)
+        return json.loads(self.client.get_response(prompt))
+    
